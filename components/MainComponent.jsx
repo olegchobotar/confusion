@@ -97,9 +97,9 @@ const CustomDrawerContentComponent = props => (
               <View style={{ flex: 1 }}>
                   <Image source={require('./assets/logo.png')} style={styles.drawerImage} />
               </View>
-          </View>
-          <View style={{ flex: 2 }}>
-              <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+              <View style={{ flex: 2 }}>
+                  <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+              </View>
           </View>
           <DrawerItems {...props} />
       </SafeAreaView>
