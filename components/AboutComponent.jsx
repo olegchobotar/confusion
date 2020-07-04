@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FlatList, Text } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { LEADERS } from '../shared/leaders';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
-const AboutUs = () => {
-    const [leaders, setLeaders] = useState(LEADERS);
+const AboutUs = props => {
+    const { leaders } = props;
 
     const renderLeader = ({ item, index }) => {
         return (
@@ -13,7 +15,7 @@ const AboutUs = () => {
                 title={item.name}
                 subtitle={item.description}
                 hideChevron={true}
-                leftAvatar={{ source: require('./assets/alberto.png') }}
+                leftAvatar={{ source: { uri: `${baseUrl}/${item.image}` } }}
             />
         );
     };
@@ -30,7 +32,7 @@ const AboutUs = () => {
             </Card>
             <Card title="Corporate Leadership">
                 <FlatList
-                    data={leaders}
+                    data={leaders.leaders}
                     renderItem={renderLeader}
                     keyExtractor={item => item.id.toString()}
                 />
@@ -43,4 +45,8 @@ AboutUs.navigationOptions = {
     title: 'About Us'
 };
 
-export default AboutUs;
+const mapStateToProps = state => ({
+    leaders: state.leaders
+});
+
+export default connect(mapStateToProps)(AboutUs);

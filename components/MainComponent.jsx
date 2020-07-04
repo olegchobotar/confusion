@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import AboutUs from './AboutComponent';
@@ -13,6 +13,11 @@ import {
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Constants from 'expo-constants';
+import fetchComments from "../actions/fetchComments";
+import fetchDishes from "../actions/fetchDishes";
+import fetchLeaders from "../actions/fetchLeaders";
+import fetchPromotions from "../actions/fetchPromotions";
+import { connect } from 'react-redux';
 
 const navigationOptions = {
     headerStyle: {
@@ -25,7 +30,7 @@ const navigationOptions = {
 };
 const MenuNavigator = createStackNavigator({
     Menu: {
-        screen: Menu,
+        screen: (props) => <Menu {...props} />,
         navigationOptions: ({ navigation }) => ({
            headerLeft: <Icon
                name="menu"
@@ -35,7 +40,7 @@ const MenuNavigator = createStackNavigator({
            />
         }),
     },
-    DishDetail: { screen: DishDetail},
+    DishDetail: { screen: (props) => <DishDetail {...props} />},
 }, {
     navigationOptions: ({ navigation }) => ({
         ...navigationOptions,
@@ -44,7 +49,7 @@ const MenuNavigator = createStackNavigator({
 });
 
 const HomeNavigator = createStackNavigator({
-    Home: { screen: Home },
+    Home: { screen: (props) => <Home {...props} /> },
 }, {
     navigationOptions: ({ navigation }) => ({
         ...navigationOptions,
@@ -58,7 +63,7 @@ const HomeNavigator = createStackNavigator({
 });
 
 const AboutUsNavigator = createStackNavigator({
-    AboutUs: { screen: AboutUs},
+    AboutUs: { screen: (props) => <AboutUs {...props} />},
 }, {
     navigationOptions: ({ navigation }) => ({
         ...navigationOptions,
@@ -72,7 +77,7 @@ const AboutUsNavigator = createStackNavigator({
 });
 
 const ContactUsNavigator = createStackNavigator({
-    ContactUs: { screen: ContactUs},
+    ContactUs: { screen: (props) => <ContactUs {...props} />},
 }, {
     navigationOptions: ({ navigation }) => ({
         ...navigationOptions,
@@ -167,7 +172,14 @@ const MainNavigator = createDrawerNavigator({
     contentComponent: CustomDrawerContentComponent,
 });
 
-const Main = () => {
+const Main = props => {
+    useEffect(() => {
+        props.fetchDishes();
+        props.fetchComments();
+        props.fetchPromotions();
+        props.fetchLeaders();
+    }, [])
+
     return (
         <View style={{ flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.headerStatusBarHeight }}>
             <MainNavigator />
@@ -199,4 +211,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main;
+export default connect(
+    null,
+    { fetchPromotions, fetchLeaders, fetchDishes, fetchComments }
+)(Main);
