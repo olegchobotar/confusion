@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import { Card } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 import { connect } from 'react-redux';
+import Loading from './LoadingComponent';
 
 const Item = props => {
     const { item } = props;
+
+    if (props.isLoading) {
+        return <Loading />
+    } else if (props.errMess) {
+        return (
+            <View>
+                <Text>{props.errMess}</Text>
+            </View>
+        )
+    }
+
     if (item) {
       return (
           <Card
@@ -26,9 +38,9 @@ const Home = props => {
 
     return (
         <ScrollView>
-           <Item item={getOnlyFeatured(dishes.dishes)} />
-           <Item item={getOnlyFeatured(promotions.promotions)} />
-           <Item item={getOnlyFeatured(leaders.leaders)} />
+           <Item item={getOnlyFeatured(dishes.dishes)} isLoading={dishes.isLoading} errMess={dishes.errMess} />
+           <Item item={getOnlyFeatured(promotions.promotions)} isLoading={promotions.isLoading} errMess={promotions.errMess} />
+           <Item item={getOnlyFeatured(leaders.leaders)} isLoading={leaders.isLoading} errMess={leaders.errMess} />
         </ScrollView>
     )
 };

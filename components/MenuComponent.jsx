@@ -1,8 +1,9 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import { Tile } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 import { connect } from 'react-redux';
+import Loading from './LoadingComponent';
 
 const Menu = props => {
     const { navigation: { navigate }, dishes } = props;
@@ -19,6 +20,16 @@ const Menu = props => {
             />
         );
     };
+
+    if (dishes.isLoading) {
+        return <Loading />
+    } else if (dishes.errMess) {
+        return (
+            <View>
+                <Text>{dishes.errMess}</Text>
+            </View>
+        )
+    }
 
     return (
         <FlatList
