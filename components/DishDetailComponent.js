@@ -2,19 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, FlatList } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
+import postFavorite from '../actions/postFavorite';
 import { connect } from 'react-redux';
 
 const DishDetail = props => {
-    const { navigation, dishes, comments } = props;
-    const [favorites, setFavorites] = useState([]);
+    const { navigation, dishes, comments, favorites } = props;
+    // const [favorites, setFavorites] = useState([]);
     const dishId = navigation.getParam('dishId', '');
     const currentDish = dishes.dishes.find(dish => dish.id === dishId);
 
     const markFavorite = dishId => {
-        setFavorites([
-            ...favorites,
-            dishId,
-        ])
+        props.postFavorite(dishId);
     };
 
     if (currentDish) {
@@ -74,6 +72,10 @@ DishDetail.navigationOptions = {
 const mapStateToProps = state => ({
     dishes: state.dishes,
     comments: state.comments,
+    favorites: state.favorites,
 });
 
-export default connect(mapStateToProps)(DishDetail);
+export default connect(
+    mapStateToProps,
+    { postFavorite }
+)(DishDetail);
