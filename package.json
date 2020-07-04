@@ -23,8 +23,13 @@
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^2.9.0",
     "react-native-unimodules": "~0.9.0",
+    "react-native-vector-icons": "^6.7.0",
     "react-native-web": "~0.11.7",
-    "react-navigation": "2.0.1"
+    "react-navigation": "2.0.1",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
