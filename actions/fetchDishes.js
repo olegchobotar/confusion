@@ -1,8 +1,11 @@
 import * as ActionTypes from '../actions/types';
 import { baseUrl } from '../shared/baseUrl';
+import { DISHES } from "../shared/dishes";
 
 export default () => dispatch => {
-    dispatch(dishesLoading);
+    // dispatch(dishesLoading);
+    dispatch(addDishes(DISHES));
+    return;
 
     return fetch(`${baseUrl}/dishes`)
         .then(response => {
