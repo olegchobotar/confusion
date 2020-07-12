@@ -5,6 +5,7 @@ import AboutUs from './AboutComponent';
 import ContactUs from './ContactComponent';
 import DishDetail from './DishDetailComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 import { View, Platform, Image, StyleSheet, ScrollView, Text } from 'react-native';
 import {
     createStackNavigator,
@@ -105,6 +106,20 @@ const ReservationNavigator = createStackNavigator({
     }),
 });
 
+const FavoritesNavigator = createStackNavigator({
+    Favorites: { screen: (props) => <Favorites {...props} />},
+}, {
+    navigationOptions: ({ navigation }) => ({
+        ...navigationOptions,
+        headerLeft: <Icon
+            name="menu"
+            size={24}
+            color="white"
+            onPress={navigation.toggleDrawer}
+        />
+    }),
+});
+
 const CustomDrawerContentComponent = props => (
   <ScrollView>
       <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -190,6 +205,21 @@ const MainNavigator = createDrawerNavigator({
             drawerIcon: ({ tintColor }) => (
                 <Icon
                     name="cutlery"
+                    type="font-awesome"
+                    size={24}
+                    color={tintColor}
+                />
+            )
+        }
+    },
+    Favorites: {
+        screen: FavoritesNavigator,
+        navigationOptions: {
+            title: 'My favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({ tintColor }) => (
+                <Icon
+                    name="heart"
                     type="font-awesome"
                     size={24}
                     color={tintColor}
