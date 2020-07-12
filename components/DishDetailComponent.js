@@ -41,9 +41,9 @@ const DishDetail = props => {
         setRating(1);
     };
 
-    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
-        return dx < -200;
-    };
+    const recognizeDrag = ({ dx }) => dx < -200;
+
+    const recognizeComment = ({ dx }) => dx > 200;
 
     const panResponder = PanResponder.create({
        onStartShouldSetPanResponder: (event, gestureState) => {
@@ -71,6 +71,8 @@ const DishDetail = props => {
                   ],
                   { cancelable: false }
               )
+          } else if (recognizeComment(gestureState)) {
+              toggleModal();
           }
 
           return true;
