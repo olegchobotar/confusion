@@ -12,6 +12,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "expo": "~37.0.3",
     "expo-constants": "latest",
+    "expo-permissions": "^9.0.1",
     "expo-secure-store": "^9.0.1",
     "expo-splash-screen": "^0.2.3",
     "expo-updates": "~0.2.0",
