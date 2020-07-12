@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {View, Text, ScrollView, FlatList, Button, Modal, StyleSheet} from 'react-native';
+import React, { useState, useRef } from 'react';
+import {View, Text, ScrollView, FlatList, Button, Modal, StyleSheet, Alert, PanResponder} from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../shared/baseUrl';
@@ -15,6 +15,7 @@ const DishDetail = props => {
     const [rating, setRating] = useState(1);
     const dishId = navigation.getParam('dishId', '');
     const currentDish = dishes.dishes.find(dish => dish.id === dishId);
+    const viewRef = useRef(null);
 
     const markFavorite = dishId => {
         props.postFavorite(dishId);
@@ -40,11 +41,53 @@ const DishDetail = props => {
         setRating(1);
     };
 
+    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+        return dx < -200;
+    };
+
+    const panResponder = PanResponder.create({
+       onStartShouldSetPanResponder: (event, gestureState) => {
+         return true;
+       },
+        onPanResponderGrant: () => {
+           viewRef.current.rubberBand(1000)
+               .then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));
+        },
+        onPanResponderEnd: (event, gestureState) => {
+          if (recognizeDrag(gestureState)) {
+              Alert.alert(
+                  'Add to favorites?',
+                  `Are you sure you wish to add ${currentDish.name} to your favorites?`,
+                  [
+                      {
+                          text: 'Cancel',
+                          onPress: () => console.log('Cancel pressed'),
+                          style: 'cancel',
+                      },
+                      {
+                          text: 'OK',
+                          onPress: () => favorites.some(item => item === dishId) ? console.log('Already favorite') : markFavorite(dishId),
+                      },
+                  ],
+                  { cancelable: false }
+              )
+          }
+
+          return true;
+        },
+    });
+
     if (currentDish) {
         const isFavorite = favorites.some(item => item === dishId);
         return (
             <ScrollView>
-                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                <Animatable.View
+                    animation="fadeInDown"
+                    ref={viewRef}
+                    duration={2000}
+                    delay={1000}
+                    {...panResponder.panHandlers}
+                >
                     <Card
                         featuredTitle={currentDish.name}
                         image={{ uri: `${baseUrl}/${currentDish.image}` }}
