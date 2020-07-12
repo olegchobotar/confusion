@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {View, Text, ScrollView, FlatList, Button, Modal, StyleSheet} from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
+import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../shared/baseUrl';
 import postFavorite from '../actions/postFavorite';
 import postComment from '../actions/postComment';
@@ -43,82 +44,85 @@ const DishDetail = props => {
         const isFavorite = favorites.some(item => item === dishId);
         return (
             <ScrollView>
-                <Card
-                    featuredTitle={currentDish.name}
-                    image={{ uri: `${baseUrl}/${currentDish.image}` }}
-                >
-                    <Text style={{ margin: 10 }}>
-                        {currentDish.description}
-                    </Text>
-                    <View style={{ justifyContent: 'center', flexDirection: 'row'}}>
-                        <Icon
-                            style={{ flex: 1 }}
-                            raised={true}
-                            reverse={true}
-                            name={isFavorite ? 'heart' : 'heart-o'}
-                            type="font-awesome"
-                            color="#f50"
-                            onPress={() => isFavorite ? console.log('Already favorite') : markFavorite(dishId)}
-                        />
-                        <Icon
-                            style={{ flex: 1 }}
-                            raised={true}
-                            reverse={true}
-                            name="pencil"
-                            type="font-awesome"
-                            color="#512DA8"
-                            onPress={toggleModal}
-                        />
-                    </View>
-                </Card>
-                <Comments comments={comments.comments.filter(comment => comment.dishId === dishId)} />
-                <Modal
-                    animationType="slide"
-                    transparent={false}
-                    visible={showCommentModal}
-                    onDismiss={() => {toggleModal(); resetForm()}}
-                    onRequestClose={() => {toggleModal(); resetForm()}}
-                >
-                    <View style={styles.modal}>
-                        <Rating
-                            type="star"
-                            startingValue={rating}
-                            showRating={true}
-                        />
-                       <Input
-                           placeholder="Author"
-                           leftIcon={<Icon
-                               name="user-o"
-                               type="font-awesome"
-                               size={24}
-                               color="black"
-                           />}
-                           onChangeText={value => setCommentAuthor(value)}
-                       />
-                       <Input
-                           placeholder="Comment"
-                           leftIcon={<Icon
-                               name="comment-o"
-                               type="font-awesome"
-                               size={24}
-                               color="black"
-                           />}
-                           onChangeText={value => setCommentMessage(value)}
-                       />
-                       <View style={styles.submitButton}>
-                           <Button
-                               onPress={handleSubmit}
-                               color="#512DA8"
-                               title="Submit"
+                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                    <Card
+                        featuredTitle={currentDish.name}
+                        image={{ uri: `${baseUrl}/${currentDish.image}` }}
+                    >
+                        <Text style={{ margin: 10 }}>
+                            {currentDish.description}
+                        </Text>
+                        <View style={{ justifyContent: 'center', flexDirection: 'row'}}>
+                            <Icon
+                                style={{ flex: 1 }}
+                                raised={true}
+                                reverse={true}
+                                name={isFavorite ? 'heart' : 'heart-o'}
+                                type="font-awesome"
+                                color="#f50"
+                                onPress={() => isFavorite ? console.log('Already favorite') : markFavorite(dishId)}
+                            />
+                            <Icon
+                                style={{ flex: 1 }}
+                                raised={true}
+                                reverse={true}
+                                name="pencil"
+                                type="font-awesome"
+                                color="#512DA8"
+                                onPress={toggleModal}
+                            />
+                        </View>
+                    </Card>
+                    <Comments comments={comments.comments.filter(comment => comment.dishId === dishId)} />
+                    <Modal
+                        animationType="slide"
+                        transparent={false}
+                        visible={showCommentModal}
+                        onDismiss={() => {toggleModal(); resetForm()}}
+                        onRequestClose={() => {toggleModal(); resetForm()}}
+                    >
+                        <View style={styles.modal}>
+                            <Rating
+                                type="star"
+                                startingValue={rating}
+                                showRating={true}
+                            />
+                           <Input
+                               placeholder="Author"
+                               leftIcon={<Icon
+                                   name="user-o"
+                                   type="font-awesome"
+                                   size={24}
+                                   color="black"
+                               />}
+                               onChangeText={value => setCommentAuthor(value)}
                            />
-                       </View>
-                    <Button
-                           onPress={handleClosing}
-                           color="#808080"
-                           title="Close"
-                       />
-                    </View>
-                </Modal>
+                           <Input
+                               placeholder="Comment"
+                               leftIcon={<Icon
+                                   name="comment-o"
+                                   type="font-awesome"
+                                   size={24}
+                                   color="black"
+                               />}
+                               onChangeText={value => setCommentMessage(value)}
+                           />
+                           <View style={styles.submitButton}>
+                               <Button
+                                   onPress={handleSubmit}
+                                   color="#512DA8"
+                                   title="Submit"
+                               />
+                           </View>
+                        <Button
+                               onPress={handleClosing}
+                               color="#808080"
+                               title="Close"
+                           />
+                        </View>
+                    </Modal>
+                </Animatable.View>
+
             </ScrollView>
         );
     } else {
@@ -138,13 +142,15 @@ const Comments = props => {
     );
 
     return (
-        <Card title="Comments">
-            <FlatList
-                data={comments}
-                renderItem={renderItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+            <Card title="Comments">
+                <FlatList
+                    data={comments}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id.toString()}
+                />
+            </Card>
+        </Animatable.View>
     )
 };
 

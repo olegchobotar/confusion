@@ -3,6 +3,7 @@ import {FlatList, ScrollView, Text} from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../shared/baseUrl';
 
 const AboutUs = props => {
@@ -43,24 +44,28 @@ const AboutUs = props => {
     } else if (leaders.errMess) {
         return (
             <ScrollView>
-                {history}
-                <Card title="Corporate Leadership">
-                    <Text>{leaders.errMess}</Text>
-                </Card>
+                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                    {history}
+                    <Card title="Corporate Leadership">
+                        <Text>{leaders.errMess}</Text>
+                    </Card>
+                </Animatable.View>
             </ScrollView>
         );
     }
 
     return (
         <ScrollView>
-            {history}
-            <Card title="Corporate Leadership">
-                <FlatList
-                    data={leaders.leaders}
-                    renderItem={renderLeader}
-                    keyExtractor={item => item.id.toString()}
-                />
-            </Card>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                {history}
+                <Card title="Corporate Leadership">
+                    <FlatList
+                        data={leaders.leaders}
+                        renderItem={renderLeader}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                </Card>
+            </Animatable.View>
         </ScrollView>
     );
 };

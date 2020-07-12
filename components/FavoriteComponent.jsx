@@ -1,10 +1,11 @@
 import React from 'react';
-import {FlatList, Text, View, Alert} from 'react-native';
+import {FlatList, Text, View, Alert, ScrollView} from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 import { connect } from 'react-redux';
 import Loading from './LoadingComponent';
 import Swipeout from 'react-native-swipeout';
+import * as Animatable from 'react-native-animatable';
 import deleteFavorite from '../actions/deleteFavorite';
 
 const Favorites = props => {
@@ -38,14 +39,16 @@ const Favorites = props => {
 
         return (
             <Swipeout right={rightButton} autoClose={true}>
-                <ListItem
-                    key={index}
-                    title={item.name}
-                    subtitle={item.description}
-                    hideChevron={true}
-                    onPress={() => navigate('DishDetail', { dishId: item.id })}
-                    leftAvatar={{ source: {uri: `${baseUrl}/${item.image}` }}}
-                />
+                <Animatable.View animation="fadeInRightBig" duration={2000}>
+                    <ListItem
+                        key={index}
+                        title={item.name}
+                        subtitle={item.description}
+                        hideChevron={true}
+                        onPress={() => navigate('DishDetail', { dishId: item.id })}
+                        leftAvatar={{ source: {uri: `${baseUrl}/${item.image}` }}}
+                    />
+                </Animatable.View>
             </Swipeout>
         );
     };
