@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {View, Text, ScrollView, FlatList, Button, Modal, StyleSheet, Alert, PanResponder} from 'react-native';
+import {View, Text, ScrollView, FlatList, Button, Modal, StyleSheet, Alert, PanResponder, Share} from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../shared/baseUrl';
@@ -44,6 +44,16 @@ const DishDetail = props => {
     const recognizeDrag = ({ dx }) => dx < -200;
 
     const recognizeComment = ({ dx }) => dx > 200;
+
+    const shareDish = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: title + ': ' + message + ' ' + url,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        })
+    };
 
     const panResponder = PanResponder.create({
        onStartShouldSetPanResponder: (event, gestureState) => {
@@ -116,6 +126,14 @@ const DishDetail = props => {
                                 color="#512DA8"
                                 onPress={toggleModal}
                             />
+                            <Icon
+                                raised
+                                reverse
+                                name='share'
+                                type='font-awesome'
+                                color='#51D2A8'
+                                style={styles.cardItem}
+                                onPress={() => shareDish(currentDish.name, currentDish.description, `${baseUrl}/${currentDish.image}`)} />
                         </View>
                     </Card>
                     <Comments comments={comments.comments.filter(comment => comment.dishId === dishId)} />

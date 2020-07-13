@@ -13,6 +13,7 @@ import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
+import * as Calendar from 'expo-calendar';
 
 const Reservation = props => {
     const [guests, setGuests] = useState(1);
@@ -45,6 +46,7 @@ const Reservation = props => {
                         console.log('smoking', smoking);
                         console.log('date', date);
                         presentLocalNotification(date);
+                        addReservationToCalender();
                         resetForm();
                     },
                 }
@@ -52,6 +54,32 @@ const Reservation = props => {
             { cancelable: false }
         )
     };
+
+    const obtainCalendarPermission = async () => {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to calendar');
+            }
+        }
+        return permission;
+    };
+
+    const addReservationToCalender = async () => {
+        await obtainCalendarPermission();
+        const newCalendarID = await Calendar.createCalendarAsync({
+            title: 'Con Fusion Table Reservation',
+            color: 'blue',
+            entityType: Calendar.EntityTypes.EVENT,
+            timeZone: 'Asia/Hong_Kong',
+            startDate: new Date(Date.parse(date)),
+            endDate: new Date(Date.parse(date) + 2 * 60 * 60 * 1000),
+            location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+        });
+        console.log(`Your new calendar ID is: ${newCalendarID}`);
+    };
+
 
     const obtainNotificationPermission = async () => {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
